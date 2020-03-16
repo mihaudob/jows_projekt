@@ -1,0 +1,6 @@
+tc qdisc add dev r1-eth1 root handle 1: htb default 12
+tc class add dev r1-eth1 parent 1: classid 1:1 htb rate 100mbps ceil 100mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:10 htb rate 5mbps ceil 100mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:11 htb rate 95mbps ceil 100mbps
+tc filter add dev r1-eth1 protocol ip parent 1:0 prio 1 u32 match ip dst 192.168.1.11​ match ip dport 8080 0xffff flowid 1:10
+tc filter add dev r1-eth1 protocol ip parent 1:0 prio 1 u32 match ip src 192.168.1.11​ match ip dport 8080 0xffff flowid 1:10
