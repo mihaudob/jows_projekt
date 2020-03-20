@@ -1,7 +1,7 @@
 /* konfiguracja transmisji
-VoIP: H31--->H11
-BE1:  H21--->H12
-BE2:  H32--->H22 */
+VoIP: H31--->H11 200K x 10
+BE1:  H21--->H12 45M
+BE2:  H32--->H22 45M        */
 
 ### Konfiguracja TC
 R1:
@@ -30,20 +30,20 @@ tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 m
 
 ### Konfiguracja iperf
 H11: Voip Odbiorce
-iperf -s -u -p 5061 -l 200 -i 1
+iperf3 -s -p 5061 -l 200 -i 1
 
 H12: BE O
-iperf -s -u -8080 -i
+iperf3 -s -8080 -i 1
 
 H21: BE N
-iperf -c 192.168.1.12 -b 45M
+iperf3 -c 192.168.1.12 -b 45M
 
 H22: BE O
-iperf -s -u -8080 -i
+iperf3 -s -p 8080 -i 1
 
 H31: Voip Nadawca
 // t = czas transmisji
-iperf -c 192.168.1.11 -u -p 5061 -l 200 -P 10 -t 70 -b 200k -i 1 
+iperf3 -c 192.168.1.11 -u -p 5061 -l 200 -P 10 -t 70 -b 200k -i 1 
 
 H32: BE N???
-iperf -c 192.168.1.22 -b 45M
+iperf3 -c 192.168.1.22 -b 45M
