@@ -8,7 +8,9 @@ iperf -s -u -p 5061 {-S 0xC0} -l 200
 
 client:
 iperf -c 192.168.1.X -u -p 5061 {-S 0xC0} -l 200 -t 200 -b 200k -i 10
-// -S = Type of service; payload (-l) to 200 bytes; the offered load (-b) to 200K
+ -S = Type of service; payload (-l) to 200 bytes; the offered load (-b) to 200K
+ https://sandilands.info/sgordon/multiple-iperf-instances - skrypty do automatyzacji
+
 - VLC = Video
   - streaming - zapisac
     - odbior
