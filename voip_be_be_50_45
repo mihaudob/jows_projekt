@@ -1,19 +1,49 @@
+/* konfiguracja transmisji
+VoIP: H31--->H11
+BE1:  H21--->H12
+BE2:  H32--->H22
+
 ### Konfiguracja TC
 R1:
+tc qdisc add dev r1-eth1 root handle 1: htb default 12
+tc class add dev r1-eth1 parent 1: classid 1:1 htb rate 100mbps ceil 100mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:10 htb prio 50 rate 50mbps ceil 100mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:11 htb prio 45 rate 45mbps ceil 100mbps
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5061 0xffff flowid 1:10
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
 
 R2:
+tc qdisc add dev r2-eth1 root handle 1: htb default 12
+tc class add dev r2-eth1 parent 1: classid 1:1 htb rate 100mbps ceil 100mbps
+tc class add dev r2-eth1 parent 1:1 classid 1:10 htb prio 50 rate 50mbps ceil 100mbps
+tc class add dev r2-eth1 parent 1:1 classid 1:11 htb prio 45 rate 45mbps ceil 100mbps
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5061 0xffff flowid 1:10
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
 
 R3:
+tc qdisc add dev r3-eth1 root handle 1: htb default 12
+tc class add dev r3-eth1 parent 1: classid 1:1 htb rate 100mbps ceil 100mbps
+tc class add dev r3-eth1 parent 1:1 classid 1:10 htb prio 50 rate 50mbps ceil 100mbps
+tc class add dev r3-eth1 parent 1:1 classid 1:11 htb prio 45 rate 45mbps ceil 100mbps
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5061 0xffff flowid 1:10
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
 
 ### Konfiguracja iperf
 H11: Voip Odbiorce
+iperf -s -u -p 5061 -l 200 -i 1
 
 H12: BE O
+iperf -s -u -8080 -i
 
 H21: BE N
+iperf -c 192.168.1.12 -b 45M
 
 H22: BE O
+iperf -s -u -8080 -i
 
 H31: Voip Nadawca
+// t = czas transmisji
+iperf -c 192.168.1.11 -u -p 5061 -l 200 -t 70 -b 200k -i 1 
 
-H32: BE O
+H32: BE N???
+iperf -c 192.168.1.22 -b 45M
