@@ -1,1 +1,19 @@
+### Konfiguracja TC
+R1:
 
+R2:
+
+R3:
+
+### Konfiguracja iperf
+H11: Voip Odbiorce
+
+H12: BE O
+
+H21: BE N
+
+H22: BE O
+
+H31: Voip Nadawca
+
+H32: BE O
