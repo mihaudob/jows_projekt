@@ -42,7 +42,6 @@ H22: BE O
 iperf3 -s -p 8080 -i 1
 
 H31: Voip Nadawca
-// t = czas transmisji
 iperf3 -c 192.168.1.11 -u -p 5061 -l 200 -P 10 -t 70 -b 200k -i 1 
 
 H32: BE N???
