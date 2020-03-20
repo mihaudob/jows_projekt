@@ -4,11 +4,11 @@
 - iperf = BE, VoIP
 ```
 server:
-iperf -s -u -p 5061 -S 0xC0 -l 200
+iperf -s -u -p 5061 {-S 0xC0} -l 200
 
 client:
-iperf -c 127.0.0.1 -u -p 5061 -S 0xC0 -l 200 -t 200 -b 200k -i 10
-```
+iperf -c 192.168.1.X -u -p 5061 {-S 0xC0} -l 200 -t 200 -b 200k -i 10
+// -S = Type of service; payload (-l) to 200 bytes; the offered load (-b) to 200K
 - VLC = Video
   - streaming - zapisac
     - odbior
