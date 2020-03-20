@@ -1,7 +1,7 @@
 /* konfiguracja transmisji
-Video: H31--->H11  ?
-BE1:   H21--->H12 45M
-BE2:   H32--->H22 45M        */
+BE1:    H31--->H11 92M
+BE2:    H21--->H12 92M
+Video:  H32--->H22  ?       */
 
 ### Konfiguracja TC
 R1:
@@ -29,18 +29,18 @@ tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 m
 tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
 
 ### Konfiguracja iperf
-H11: Video O
-
-H12: BE O
+H11: BE1 0
 iperf3 -s -8080 -i 1
 
-H21: BE N
+H12: BE2 O
+iperf3 -s -8080 -i 1
+
+H21: BE2 N
 iperf3 -c 192.168.1.12 -b 92M
 
-H22: BE O
-iperf3 -s -p 8080 -i 1
+H22: Video O
 
-H31: Video N
+H31: BE1 N
+iperf3 -c 192.168.1.11 -b 92M
 
-H32: BE N???
-iperf3 -c 192.168.1.22 -b 92M
+H32: Video N
