@@ -1,7 +1,7 @@
 /* konfiguracja transmisji
 VoIP: H31--->H11
 BE1:  H21--->H12
-BE2:  H32--->H22
+BE2:  H32--->H22 */
 
 ### Konfiguracja TC
 R1:
@@ -43,7 +43,7 @@ iperf -s -u -8080 -i
 
 H31: Voip Nadawca
 // t = czas transmisji
-iperf -c 192.168.1.11 -u -p 5061 -l 200 -t 70 -b 200k -i 1 
+iperf -c 192.168.1.11 -u -p 5061 -l 200 -P 10 -t 70 -b 200k -i 1 
 
 H32: BE N???
 iperf -c 192.168.1.22 -b 45M
