@@ -15,6 +15,13 @@ iperf -c 192.168.1.X -u -p 5061 {-S 0xC0} -l 200 -t 200 -b 200k -i 10
   - streaming - zapisac
     - odbior
     - nadanie
+    
+## Filtorowanie
+1. Nr portów:
+- BE 8080
+- VoIP 5060
+- Video 5065
+    
 ## Scenariusze
 1. VoIP + BE + BE
 - 50/45 - all good
