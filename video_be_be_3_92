@@ -1,0 +1,46 @@
+/* konfiguracja transmisji
+Video: H31--->H11  ?
+BE1:   H21--->H12 45M
+BE2:   H32--->H22 45M        */
+
+### Konfiguracja TC
+R1:
+tc qdisc add dev r1-eth1 root handle 1: htb default 12
+tc class add dev r1-eth1 parent 1: classid 1:1 htb rate 100mbps ceil 100mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:10 htb prio 3 rate 3mbps ceil 100mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:11 htb prio 92 rate 92mbps ceil 100mbps
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5065 0xffff flowid 1:10
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+
+R2:
+tc qdisc add dev r2-eth1 root handle 1: htb default 12
+tc class add dev r2-eth1 parent 1: classid 1:1 htb rate 100mbps ceil 100mbps
+tc class add dev r2-eth1 parent 1:1 classid 1:10 htb prio 3 rate 3mbps ceil 100mbps
+tc class add dev r2-eth1 parent 1:1 classid 1:11 htb prio 92 rate 92mbps ceil 100mbps
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5065 0xffff flowid 1:10
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+
+R3:
+tc qdisc add dev r3-eth1 root handle 1: htb default 12
+tc class add dev r3-eth1 parent 1: classid 1:1 htb rate 100mbps ceil 100mbps
+tc class add dev r3-eth1 parent 1:1 classid 1:10 htb prio 3 rate 3mbps ceil 100mbps
+tc class add dev r3-eth1 parent 1:1 classid 1:11 htb prio 92 rate 92mbps ceil 100mbps
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5065 0xffff flowid 1:10
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+
+### Konfiguracja iperf
+H11: Video O
+
+H12: BE O
+iperf3 -s -8080 -i 1
+
+H21: BE N
+iperf3 -c 192.168.1.12 -b 92M
+
+H22: BE O
+iperf3 -s -p 8080 -i 1
+
+H31: Video N
+
+H32: BE N???
+iperf3 -c 192.168.1.22 -b 92M
