@@ -37,7 +37,7 @@ iperf -c 192.168.1.X -u -p 5061 {-S 0xC0} -l 200 -t 200 -b 200k -i 10
 
 1. VoIP + Video + BE
 - 20/30/45 
-- 2/3/99 
+- 2/3/90 
 - w. jitter (?)
 - wo. jitter (?)
 
