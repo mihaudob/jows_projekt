@@ -1,0 +1,131 @@
+/* konfiguracja transmisji
+VoIP: H31--->H11 200K x 10
+BE1:  H21--->H12 45M
+BE2:  H32--->H22 45M        */
+
+### Konfiguracja TC
+R1:
+tc qdisc add dev r1-eth1 root handle 1: htb default 12
+tc class add dev r1-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 100mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+////////////////
+tc qdisc add dev r1-eth1 root handle 1: htb default 12
+tc class add dev r1-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 100mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1.5mbps ceil 2mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:11 htb prio 45 rate 0.5mbps ceil 2mbps
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+R2:
+tc qdisc add dev r2-eth1 root handle 1: htb default 12
+tc class add dev r2-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r2-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r2-eth1 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+///////////////////////
+tc qdisc add dev r2-eth1 root handle 1: htb default 12
+tc class add dev r2-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r2-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1.5mbps ceil 2mbps
+tc class add dev r2-eth1 parent 1:1 classid 1:11 htb prio 45 rate 0.5mbps ceil 2mbps
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+R3:
+tc qdisc add dev r3-eth1 root handle 1: htb default 12
+tc class add dev r3-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r3-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r3-eth1 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+////////////
+tc qdisc add dev r3-eth1 root handle 1: htb default 12
+tc class add dev r3-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r3-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1.5mbps ceil 2mbps
+tc class add dev r3-eth1 parent 1:1 classid 1:11 htb prio 45 rate 0.5mbps ceil 2mbps
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+
+### Konfiguracja iperf
+H11: Voip Odbiorce
+iperf -s -u -i 1 -p 5060 >> h11
+#iperf -s -p 5060 -l 200 -i 1 >> file_h11
+
+H12: BE O
+iperf -s -p 8080 -i 1 >> file_h12
+
+H21: BE N
+iperf -c 192.168.1.12 -p 8080 -b 2M -t 70 >> file_21
+
+H22: BE O
+iperf -s -p 8080 -i 1  >> file_h22
+
+H31: Voip Nadawca
+iperf -c 192.168.1.11 -u -b 64k -p 5060 -d -i 1 -t 20 -P 10 >> h31
+#iperf -c 192.168.1.11 -u -p 5060 -l 200 -P 10 -t 70 -b 200k -i 1 >> file_31
+
+H32: BE N
+iperf -c 192.168.2.22 -p 8080 -t 70 -b 2M >> file_32
+
+
+# 1 Scenariusz
+W sieci ruch tylko h31 <-> h11 (VoIP) bez kolejek
+- 10 rozmow po 64 kb - b.dobra jakosc
+
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+h11:
+[SUM]  0.0-20.3 sec   797 KBytes   321 Kbits/sec   0.034 ms    0/  550 (0%)
+[SUM] 0.00-20.31 sec  5 datagrams received out-of-order
+
+h31:
+[SUM]  0.0-20.2 sec   833 KBytes   337 Kbits/sec   0.027 ms    0/  580 (0%)
+[SUM] Sent 550 datagrams
+
+# 2 Scenariusz
+W sieci ruch tylko h31 <-> h11 (VoIP) z kolejka
+- 10 rozmow po 64 kb - b.dobra jakosc
+
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+h11:
+[SUM]  0.0-20.3 sec   797 KBytes   321 Kbits/sec   0.746 ms    0/  550 (0%)
+[SUM] 0.00-20.30 sec  5 datagrams received out-of-order
+
+h31:
+[SUM]  0.0-20.2 sec   831 KBytes   337 Kbits/sec   0.631 ms    0/  579 (0%)
+[SUM] Sent 550 datagrams
+
+# 3 Scenariusz
+W sieci ruch h31 <-> h11 (VoIP) , i 4 BE z kolejka
+- 10 rozmow po 64 kb - b.dobra jakosc
+- 2 x 2 BE
+
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+h11:
+[SUM]  0.0-20.5 sec   797 KBytes   319 Kbits/sec  63.116 ms    0/  550 (0%)
+[SUM] Sent 550 datagrams
+
+h31:
+[SUM]  0.0-20.3 sec   834 KBytes   337 Kbits/sec  62.527 ms    0/  581 (0%)
+[SUM] Sent 550 datagrams
+
+# 4 Scenariusz
+W sieci ruch h31 <-> h11 (VoIP) , i 4 BE - lepsze kolejki
+- 10 rozmow po 64 kb - b.dobra jakosc
+- 2 x 2 BE
+
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+h11:
+[SUM]  0.0-20.5 sec   797 KBytes   319 Kbits/sec   0.575 ms    0/  550 (0%)
+[SUM] 0.00-20.45 sec  5 datagrams received out-of-order
+
+h31:
+[SUM]  0.0-20.3 sec   834 KBytes   337 Kbits/sec   0.023 ms    0/  581 (0%)
+
+
