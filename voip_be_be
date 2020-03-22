@@ -11,7 +11,31 @@ tc class add dev r1-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mb
 tc class add dev r1-eth1 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
 tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
 tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
-tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r1-eth1 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r1-eth1 parent 1:11 handle 30: pfifo limit 5
+tc qdisc add dev r1-eth2 root handle 1: htb default 12
+tc class add dev r1-eth2 parent 1: classid 1:1 htb rate 2mbps ceil 100mbps
+tc class add dev r1-eth2 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r1-eth2 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r1-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r1-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r1-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r1-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r1-eth2 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r1-eth2 parent 1:11 handle 30: pfifo limit 5
+tc qdisc add dev r1-eth3 root handle 1: htb default 12
+tc class add dev r1-eth3 parent 1: classid 1:1 htb rate 2mbps ceil 100mbps
+tc class add dev r1-eth3 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r1-eth3 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r1-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r1-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r1-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r1-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r1-eth3 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r1-eth3 parent 1:11 handle 30: pfifo limit 5
+
 ////////////////
 tc qdisc add dev r1-eth1 root handle 1: htb default 12
 tc class add dev r1-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 100mbps
@@ -19,7 +43,11 @@ tc class add dev r1-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1.5mbps ceil 2
 tc class add dev r1-eth1 parent 1:1 classid 1:11 htb prio 45 rate 0.5mbps ceil 2mbps
 tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
 tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
-tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r1-eth1 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r1-eth1 parent 1:11 handle 30: pfifo limit 5
+
 R2:
 tc qdisc add dev r2-eth1 root handle 1: htb default 12
 tc class add dev r2-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
@@ -27,7 +55,32 @@ tc class add dev r2-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mb
 tc class add dev r2-eth1 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
 tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
 tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
-tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r2-eth1 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r2-eth1 parent 1:11 handle 30: pfifo limit 5
+tc qdisc add dev r2-eth3 root handle 1: htb default 12
+tc class add dev r2-eth3 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r2-eth3 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r2-eth3 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r2-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r2-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r2-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r2-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r2-eth3 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r2-eth3 parent 1:11 handle 30: pfifo limit 5
+tc qdisc add dev r2-eth2 root handle 1: htb default 12
+tc class add dev r2-eth2 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r2-eth2 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r2-eth2 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r2-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r2-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r2-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r2-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r2-eth2 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r2-eth2 parent 1:11 handle 30: pfifo limit 5
+
+
 ///////////////////////
 tc qdisc add dev r2-eth1 root handle 1: htb default 12
 tc class add dev r2-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
@@ -35,7 +88,11 @@ tc class add dev r2-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1.5mbps ceil 2
 tc class add dev r2-eth1 parent 1:1 classid 1:11 htb prio 45 rate 0.5mbps ceil 2mbps
 tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
 tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
-tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r2-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r2-eth1 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r2-eth1 parent 1:11 handle 30: pfifo limit 5
+
 R3:
 tc qdisc add dev r3-eth1 root handle 1: htb default 12
 tc class add dev r3-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
@@ -43,7 +100,32 @@ tc class add dev r3-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mb
 tc class add dev r3-eth1 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
 tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
 tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
-tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r3-eth1 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r3-eth1 parent 1:11 handle 30: pfifo limit 5
+tc qdisc add dev r3-eth3 root handle 1: htb default 12
+tc class add dev r3-eth3 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r3-eth3 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r3-eth3 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r3-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r3-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r3-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r3-eth3 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r3-eth3 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r3-eth3 parent 1:11 handle 30: pfifo limit 5
+tc qdisc add dev r3-eth2 root handle 1: htb default 12
+tc class add dev r3-eth2 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r3-eth2 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
+tc class add dev r3-eth2 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
+tc filter add dev r3-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
+tc filter add dev r3-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc filter add dev r3-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r3-eth2 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r3-eth2 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r3-eth2 parent 1:11 handle 30: pfifo limit 5
+
+
 ////////////
 tc qdisc add dev r3-eth1 root handle 1: htb default 12
 tc class add dev r3-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
@@ -51,32 +133,34 @@ tc class add dev r3-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1.5mbps ceil 2
 tc class add dev r3-eth1 parent 1:1 classid 1:11 htb prio 45 rate 0.5mbps ceil 2mbps
 tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
 tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
-tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip src 192.168.1.11 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
+tc filter add dev r3-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
+tc qdisc add dev r3-eth1 parent 1:10 handle 20: pfifo limit 5
+tc qdisc add dev r3-eth1 parent 1:11 handle 30: pfifo limit 5
 
 ### Konfiguracja iperf
 H11: Voip Odbiorce
 iperf -s -u -i 1 -p 5060 >> h11
-#iperf -s -p 5060 -l 200 -i 1 >> file_h11
+#iperf -s -p 5060 -l 200 -i 1 >> h11
 
 H12: BE O
-iperf -s -p 8080 -i 1 >> file_h12
+iperf -s -p 8080 -i 1 >> h12
 
 H21: BE N
-iperf -c 192.168.1.12 -p 8080 -b 2M -t 70 >> file_21
+iperf -c 192.168.1.12 -p 8080 -b 2M -t 70 >> h21
 
 H22: BE O
-iperf -s -p 8080 -i 1  >> file_h22
+iperf -s -p 8080 -i 1  >> h22
 
 H31: Voip Nadawca
 iperf -c 192.168.1.11 -u -b 64k -p 5060 -d -i 1 -t 20 -P 10 >> h31
-#iperf -c 192.168.1.11 -u -p 5060 -l 200 -P 10 -t 70 -b 200k -i 1 >> file_31
 
 H32: BE N
-iperf -c 192.168.2.22 -p 8080 -t 70 -b 2M >> file_32
+iperf -c 192.168.2.22 -p 8080 -t 70 -b 2M >> h32
 
 
 # 1 Scenariusz
-W sieci ruch tylko h31 <-> h11 (VoIP) bez kolejek
+W sieci ruch tylko h31 <-> h11 (VoIP) bez podzialu pasma
 - 10 rozmow po 64 kb - b.dobra jakosc
 
 [ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
@@ -89,7 +173,7 @@ h31:
 [SUM] Sent 550 datagrams
 
 # 2 Scenariusz
-W sieci ruch tylko h31 <-> h11 (VoIP) z kolejka
+W sieci ruch tylko h31 <-> h11 (VoIP) z kolejka 50/50
 - 10 rozmow po 64 kb - b.dobra jakosc
 
 [ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
@@ -102,7 +186,7 @@ h31:
 [SUM] Sent 550 datagrams
 
 # 3 Scenariusz
-W sieci ruch h31 <-> h11 (VoIP) , i 4 BE z kolejka
+W sieci ruch h31 <-> h11 (VoIP) , i 4 BE z kolejka 50/50
 - 10 rozmow po 64 kb - b.dobra jakosc
 - 2 x 2 BE
 
@@ -116,7 +200,7 @@ h31:
 [SUM] Sent 550 datagrams
 
 # 4 Scenariusz
-W sieci ruch h31 <-> h11 (VoIP) , i 4 BE - lepsze kolejki
+W sieci ruch h31 <-> h11 (VoIP) , i 4 BE - lepsze kolejki 75/50
 - 10 rozmow po 64 kb - b.dobra jakosc
 - 2 x 2 BE
 
