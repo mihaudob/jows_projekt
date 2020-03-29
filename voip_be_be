@@ -5,12 +5,14 @@ BE2:  H32--->H22 45M        */
 
 ### Konfiguracja TC
 R1:
-tc qdisc add dev r1-eth1 root handle 1: htb default 12
-tc class add dev r1-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 100mbps
-tc class add dev r1-eth1 parent 1:1 classid 1:10 htb prio 50 rate 1mbps ceil 2mbps
-tc class add dev r1-eth1 parent 1:1 classid 1:11 htb prio 45 rate 1mbps ceil 2mbps
-tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip dport 5060 0xffff flowid 1:10
-tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.11 match ip sport 5060 0xffff flowid 1:10
+tc qdisc add dev r1-eth1 root handle 1: htb
+tc class add dev r1-eth1 parent 1: classid 1:1 htb rate 2mbps ceil 2mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:10 htb rate 1mbps ceil 2mbps
+tc class add dev r1-eth1 parent 1:1 classid 1:11 htb rate 1mbps ceil 2mbps
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip tos 0x20 0xff flowid 1:10
+tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip tos 0x80 0xff flowid 1:11
+
+
 tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.1.12 match ip dport 8080 0xffff flowid 1:11
 tc filter add dev r1-eth1 protocol ip parent 1:0 u32 match ip dst 192.168.2.22 match ip dport 8080 0xffff flowid 1:11
 tc qdisc add dev r1-eth1 parent 1:10 handle 20: pfifo limit 5
@@ -147,16 +149,16 @@ H12: BE O
 iperf -s -p 8080 -i 1 >> h12
 
 H21: BE N
-iperf -c 192.168.1.12 -p 8080 -b 2M -t 70 >> h21
+iperf -c 192.168.1.12 -p 8080 -b 2M -t 70 -S 0x80	>> h21
 
 H22: BE O
 iperf -s -p 8080 -i 1  >> h22
 
 H31: Voip Nadawca
-iperf -c 192.168.1.11 -u -b 64k -p 5060 -d -i 1 -t 20 -P 10 >> h31
+iperf -c 192.168.1.11 -u -b 64k -p 5060 -d -i 1 -t 20 -P 10 -S 0x20 >> h31
 
 H32: BE N
-iperf -c 192.168.2.22 -p 8080 -t 70 -b 2M >> h32
+iperf -c 192.168.2.22 -p 8080 -t 70 -b 2M -S 0x80 >> h32
 
 
 # 1 Scenariusz
